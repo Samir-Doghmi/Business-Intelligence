@@ -1,0 +1,94 @@
+-- Individuazione dei corsi di laurea ad elevato tasso di commitment, ovvero appelli di esami diversi
+-- ma del medesimo corso di laurea che si sono svolti nello stesso giorno;
+
+
+
+-- Altera la tabella per cambiare il tipo di dati della colonna
+-- starting from 7th character it extract 4 characters, while || is used to concateneate the words in a string
+
+-- '20' || substr(DtAppello, 7, 2) takes the last two characters from '07/07/16', which are '16'. It prepends '20' to it, resulting in '2016
+
+
+SELECT DISTINCT DtAppello, COUNT(Cds) AS totale_iscrizioni_appelli
+FROM bos_denormalizzato
+GROUP BY DtAppello
+ORDER BY strftime('%Y-%m-%d', '20' || substr(DtAppello, 7, 2) || '-' || substr(DtAppello, 4, 2) || '-' || substr(DtAppello, 1, 2)) DESC;
+
+-- alternativa
+
+select *, strftime('%Y-%m-%d', '20' || substr(DtAppello, 7, 2) || '-' || substr(DtAppello, 4, 2) || '-' || substr(DtAppello, 1, 2)) AS converted_data
+from (
+SELECT DISTINCT DtAppello, COUNT(Cds) AS totale_iscrizioni_appelli
+FROM bos_denormalizzato
+GROUP BY DtAppello
+)
+ORDER BY converted_data DESC;
+
+
+--- raggruppa per l'anno
+select distinct  strftime('%Y-%m-%d', '20' || substr(DtAppello, 7, 2) || '-' || substr(DtAppello, 4, 2) || '-' || substr(DtAppello, 1, 2))
+from bos_denormalizzato
+
+from bos_denormalizzato
+
+SELECT COUNT(*)- COUNT(CdSCod) As CdSCod, COUNT(*)-COUNT(CdS) As B, COUNT(*)-COUNT(TipoCorso) As TipoCorso, 
+COUNT(*)- COUNT(AdCod) As AdCod, COUNT(*)- COUNT(AD) As AD, COUNT(*)- COUNT(AdSettCod) As AdSettCod,
+COUNT(*)- COUNT(Docente) As Docente, COUNT(*)- COUNT(DtAppello) As DtAppello,
+COUNT(*)- COUNT(Studente) As Studente, COUNT(*)- COUNT(StuGen) As StuGen,COUNT(*)- COUNT(StuResArea) As StuResArea,
+COUNT(*)- COUNT(StuEtaImm) As StuEtaImm, COUNT(*)- COUNT(CittTipo) As CittTipo, COUNT(*)- COUNT(CittNaz) As CittNaz,
+COUNT(*)- COUNT(Iscrizione) As Iscrizione, COUNT(*)- COUNT(Superamento) As Superamento, COUNT(*)- COUNT(Insufficienza) As Insufficienza,
+COUNT(*)- COUNT(Ritiro) As Ritiro, COUNT(*)- COUNT(Assenza) As Assenza, COUNT(*)- COUNT(Voto) As Voto
+from bos_denormalizzato
+
+------ distinct cds e count delle iscrizioni sempre per cds
+
+select distinct  CdsCod, Cds, count(Cds) as totale_iscrizioni_appelli
+from bos_denormalizzato
+group by CdsCod, Cds
+order by totale_iscrizioni_appelli desc
+
+--- per ogni cds count dei corsi di insegnamento
+
+select distinct  CdsCod, Cds, count (distinct AD) as TOTALE_AD
+from bos_denormalizzato
+group by CdsCod, Cds
+order by TOTALE_AD desc
+
+
+select distinct  AD, count(*) as count
+from bos_denormalizzato
+group by AD
+
+
+--- tirocini
+select sum(count)
+from
+(
+SELECT  AD,TipoCorso, count(*) as count
+FROM bos_denormalizzato
+WHERE AD LIKE '%TIROCINIO%'
+group by AD, TipoCorso
+)
+
+
+SELECT  AD,TipoCorso,CdS,  count(*) as count
+FROM bos_denormalizzato
+WHERE AD LIKE '%INGLESE%'
+group by AD,TipoCorso,CdS
+
+
+-- add macrocategoria, add dummy per la lingua del corso
+ALTER TABLE table_name
+ADD column_name datatype 
+
+
+select distinct  CdsCod, Cds, count(Cds)
+from bos_denormalizzato
+
+
+------ distinct cds e count delle iscrizioni sempre per cds
+select distinct  CdsCod, Cds, count(Cds) as totale_iscrizioni_appelli
+from bos_denormalizzato
+group by CdsCod, Cds
+order by totale_iscrizioni_appelli desc
+
